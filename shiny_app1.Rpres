@@ -1,0 +1,76 @@
+Shiny App Demo for Data Products Class
+========================================================
+author: schelikani
+date:  7/25/2014
+
+Regression Analysis in MTCARS dataset
+========================================================
+
+This Analysis is done to achieve the following objectives
+
+- Demonstrate a simple Shiny Application
+- Incorporte some control buttons and reactive output
+- Show the recomputed chares & table data for each user input/ selection
+- Regression Model is built on a single Regression selected by User
+- Predicted Data set is presented
+- Results are presented in 3 tabs: Plot, Model, Prediction
+
+ui.R code sample
+========================================================
+
+```{r eval= FALSE}
+library(shiny)
+
+# Define UI for random distribution application 
+shinyUI(fluidPage(
+  
+  # Application title
+  titlePanel("Regression on MTCARS Dataset"),
+  
+  # Sidebar with controls to select the random distribution type
+  # and number of observations to generate. Note the use of the br()
+  # element to introduce extra vertical spacing
+  sidebarLayout(
+    sidebarPanel(
+      radioButtons("regre", "Regression Variables:",
+                   c("Cylinders" = "cyl",
+                     "Weight" = "wt",
+                     "Gear" = "gear",
+                     "Horse Power" = "hp")),
+      br()
+      
+    ),
+    
+    # Show a tabset that includes a plot, summary, and table view
+    # of the generated distribution
+    mainPanel(
+      tabsetPanel(type = "tabs", 
+                  tabPanel("Plot", plotOutput("plot")), 
+                  tabPanel("Model", verbatimTextOutput("model")),
+                  tabPanel("Prediction",verbatimTextOutput("pred"))
+                
+      )
+    )
+  )
+))
+
+```
+
+Chart Generated from the Regressiob Model: mpg~wt
+========================================================
+
+```{r, echo=FALSE, fig.width= 12, fig.height=10}
+# Example plot for a user selection of regressor: wt (Weight)
+library(ggplot2)
+library(datasets)
+ qplot(mtcars[,"wt"],mtcars[,"mpg"], data=mtcars, goem =c("point","smooth"), method="lm", formula=y~x,
+          facets=.~am,col=cyl,main=paste('mpg Vs ','wt',sep=''), xlab=paste('','wt','',sep=''), ylab="mpg")
+```
+
+
+Conclusions
+=======================================================
+
+Key conclusions arrived from the Regression Model
+- Regressor variables wt(Weight), hp(horsepower), cyl(Cylinders) have significant prediction strength on mpg(mile per gallon)
+- Regressor gear does not have good prediction strenght on mpg
